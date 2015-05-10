@@ -27,6 +27,8 @@ class Szbl_Sidebar_Selector
 		add_action( 'admin_head', array( $this, 'admin_head' ) );
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ) );
 		add_action( 'save_post', array( $this, 'save_post' ) );
+		add_action( 'get_sidebar', array( $this, 'get_sidebar' ) );
+		add_filter( 'sidebars_widgets', array( $this, 'sidebars_widgets' ) );
 	}
 
 	public function admin_head()
@@ -378,6 +380,39 @@ form.szbl-sidebar-form h3 { border-bottom: 1px solid #e7e7e7; padding-bottom: .5
 		{
 			update_post_meta( $post_id, 'szbl_sidebar', $_POST['szbl']['sidebar'] );
 		}
+	}
+
+	public function get_sidebar()
+	{
+		// global $wp_registered_sidebars, $wp_registered_widgets;
+
+		// if ( $custom = get_post_meta( get_the_ID(), 'szbl_sidebar', true ) )
+		// {
+		// 	$wp_registered_sidebars = array( '')
+		// 	wp_dump( $wp_registered_sidebars ); die;
+		// }
+	}
+
+	/*
+	 * If there is a custom sidebar, replace all existing sidebar widgets with these.
+	 */
+	public function sidebars_widgets( $widgets )
+	{
+		// don't wipe out widgets in admin
+		if ( is_admin() )
+			return $widgets;
+
+		if ( $sidebar = get_post_meta( get_the_ID(), 'szbl_sidebar', true ) )
+		{
+			foreach ( $widgets as $k => $v )
+			{
+				if ( !in_array( $k, array( $sidebar, 'wp_inactive_widgets' ) ) )
+				{
+					$widgets[ $k ] = $widgets[ $sidebar ];
+				}
+			}
+		}
+		return $widgets;
 	}
 
 }
