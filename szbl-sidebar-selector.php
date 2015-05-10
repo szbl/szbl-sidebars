@@ -27,7 +27,6 @@ class Szbl_Sidebar_Selector
 		add_action( 'admin_head', array( $this, 'admin_head' ) );
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ) );
 		add_action( 'save_post', array( $this, 'save_post' ) );
-		add_action( 'get_sidebar', array( $this, 'get_sidebar' ) );
 		add_filter( 'sidebars_widgets', array( $this, 'sidebars_widgets' ) );
 	}
 
@@ -380,17 +379,6 @@ form.szbl-sidebar-form h3 { border-bottom: 1px solid #e7e7e7; padding-bottom: .5
 		{
 			update_post_meta( $post_id, 'szbl_sidebar', $_POST['szbl']['sidebar'] );
 		}
-	}
-
-	public function get_sidebar()
-	{
-		// global $wp_registered_sidebars, $wp_registered_widgets;
-
-		// if ( $custom = get_post_meta( get_the_ID(), 'szbl_sidebar', true ) )
-		// {
-		// 	$wp_registered_sidebars = array( '')
-		// 	wp_dump( $wp_registered_sidebars ); die;
-		// }
 	}
 
 	/*
